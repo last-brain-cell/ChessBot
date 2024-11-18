@@ -1,7 +1,7 @@
 import board, pieces, ai
 from move import Move
 
-# Returns a move object based on the users input. Does not check if the move is valid.
+
 def get_user_move():
     print("Example Move: A2 A4")
     move_str = input("Your Move: ")
@@ -9,15 +9,15 @@ def get_user_move():
 
     try:
         xfrom = letter_to_xpos(move_str[0:1])
-        yfrom = 8 - int(move_str[1:2]) # The board is "upside down", so flip the y coordinate.
+        yfrom = 8 - int(move_str[1:2])  # The board is "upside down", so flip the y coordinate.
         xto = letter_to_xpos(move_str[2:3])
-        yto = 8 - int(move_str[3:4]) # The board is "upside down", so flip the y coordinate.
+        yto = 8 - int(move_str[3:4])  # The board is "upside down", so flip the y coordinate.
         return Move(xfrom, yfrom, xto, yto)
     except ValueError:
         print("Invalid format. Example: A2 A4")
         return get_user_move()
 
-# Returns a valid move based on the users input.
+
 def get_valid_user_move(board):
     while True:
         move = get_user_move()
@@ -38,7 +38,7 @@ def get_valid_user_move(board):
             print("Invalid move.")
     return move
 
-# Converts a letter (A-H) to the x position on the chess board.
+
 def letter_to_xpos(letter):
     letter = letter.upper()
     if letter == 'A':
@@ -60,6 +60,7 @@ def letter_to_xpos(letter):
 
     raise ValueError("Invalid letter.")
 
+
 #
 # Entry point.
 #
@@ -68,8 +69,8 @@ print(board.to_string())
 
 while True:
     move = get_valid_user_move(board)
-    if (move == 0):
-        if (board.is_check(pieces.Piece.WHITE)):
+    if move == 0:
+        if board.is_check(pieces.Piece.WHITE):
             print("Checkmate. Black Wins.")
             break
         else:
@@ -82,8 +83,8 @@ while True:
     print(board.to_string())
 
     ai_move = ai.AI.get_ai_move(board, [])
-    if (ai_move == 0):
-        if (board.is_check(pieces.Piece.BLACK)):
+    if ai_move == 0:
+        if board.is_check(pieces.Piece.BLACK):
             print("Checkmate. White wins.")
             break
         else:

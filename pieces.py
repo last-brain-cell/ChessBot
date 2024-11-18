@@ -200,19 +200,11 @@ class King(Piece):
         super(King, self).__init__(x, y, color, King.PIECE_TYPE, King.VALUE)
 
     def get_possible_moves(self, board):
-        moves = []
-
-        moves.append(self.get_move(board, self.x+1, self.y))
-        moves.append(self.get_move(board, self.x+1, self.y+1))
-        moves.append(self.get_move(board, self.x, self.y+1))
-        moves.append(self.get_move(board, self.x-1, self.y+1))
-        moves.append(self.get_move(board, self.x-1, self.y))
-        moves.append(self.get_move(board, self.x-1, self.y-1))
-        moves.append(self.get_move(board, self.x, self.y-1))
-        moves.append(self.get_move(board, self.x+1, self.y-1))
-
-        moves.append(self.get_castle_kingside_move(board))
-        moves.append(self.get_castle_queenside_move(board))
+        moves = [self.get_move(board, self.x + 1, self.y), self.get_move(board, self.x + 1, self.y + 1),
+                 self.get_move(board, self.x, self.y + 1), self.get_move(board, self.x - 1, self.y + 1),
+                 self.get_move(board, self.x - 1, self.y), self.get_move(board, self.x - 1, self.y - 1),
+                 self.get_move(board, self.x, self.y - 1), self.get_move(board, self.x + 1, self.y - 1),
+                 self.get_castle_kingside_move(board), self.get_castle_queenside_move(board)]
 
         return self.remove_null_from_list(moves)
 
@@ -224,18 +216,18 @@ class King(Piece):
             return 0
 
         # If the rook in the corner is not our color we cannot castle (duh).
-        if (piece_in_corner.color != self.color):
+        if piece_in_corner.color != self.color:
             return 0
         
         # If the king has moved, we cannot castle
-        if (self.color == Piece.WHITE and board.white_king_moved):
+        if self.color == Piece.WHITE and board.white_king_moved:
             return 0
         
-        if (self.color == Piece.BLACK and board.black_king_moved):
+        if self.color == Piece.BLACK and board.black_king_moved:
             return 0
 
         # If there are pieces in between the king and rook we cannot castle
-        if (board.get_piece(self.x+1, self.y) != 0 or board.get_piece(self.x+2, self.y) != 0):
+        if board.get_piece(self.x + 1, self.y) != 0 or board.get_piece(self.x + 2, self.y) != 0:
             return 0
         
         return Move(self.x, self.y, self.x+2, self.y)
@@ -243,22 +235,22 @@ class King(Piece):
     def get_castle_queenside_move(self, board):
         # Are we looking at a valid rook
         piece_in_corner = board.get_piece(self.x-4, self.y)
-        if (piece_in_corner == 0 or piece_in_corner.piece_type != Rook.PIECE_TYPE):
+        if piece_in_corner == 0 or piece_in_corner.piece_type != Rook.PIECE_TYPE:
             return 0
 
         # If the rook in the corner is not our color we cannot castle (duh).
-        if (piece_in_corner.color != self.color):
+        if piece_in_corner.color != self.color:
             return 0
         
         # If the king has moved, we cannot castle
-        if (self.color == Piece.WHITE and board.white_king_moved):
+        if self.color == Piece.WHITE and board.white_king_moved:
             return 0
         
-        if (self.color == Piece.BLACK and board.black_king_moved):
+        if self.color == Piece.BLACK and board.black_king_moved:
             return 0
 
         # If there are pieces in between the king and rook we cannot castle
-        if (board.get_piece(self.x-1, self.y) != 0 or board.get_piece(self.x-2, self.y) != 0 or board.get_piece(self.x-3, self.y) != 0):
+        if board.get_piece(self.x - 1, self.y) != 0 or board.get_piece(self.x - 2, self.y) != 0 or board.get_piece(self.x - 3, self.y) != 0:
             return 0
         
         return Move(self.x, self.y, self.x-2, self.y)
@@ -287,24 +279,24 @@ class Pawn(Piece):
 
         # Direction the pawn can move in.
         direction = -1
-        if (self.color == Piece.BLACK):
+        if self.color == Piece.BLACK:
             direction = 1
 
         # The general 1 step forward move.
-        if (board.get_piece(self.x, self.y+direction) == 0):
+        if board.get_piece(self.x, self.y + direction) == 0:
             moves.append(self.get_move(board, self.x, self.y + direction))
 
         # The Pawn can take 2 steps as the first move.
-        if (self.is_starting_position() and board.get_piece(self.x, self.y+ direction) == 0 and board.get_piece(self.x, self.y + direction*2) == 0):
+        if self.is_starting_position() and board.get_piece(self.x, self.y + direction) == 0 and board.get_piece(self.x, self.y + direction * 2) == 0:
             moves.append(self.get_move(board, self.x, self.y + direction * 2))
 
         # Eating pieces.
         piece = board.get_piece(self.x + 1, self.y + direction)
-        if (piece != 0):
+        if piece != 0:
             moves.append(self.get_move(board, self.x + 1, self.y + direction))
 
         piece = board.get_piece(self.x - 1, self.y + direction)
-        if (piece != 0):
+        if piece != 0:
             moves.append(self.get_move(board, self.x - 1, self.y + direction))
 
         return self.remove_null_from_list(moves)

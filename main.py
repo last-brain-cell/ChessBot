@@ -9,9 +9,9 @@ def get_user_move():
 
     try:
         xfrom = letter_to_xpos(move_str[0:1])
-        yfrom = 8 - int(move_str[1:2])  # The board is "upside down", so flip the y coordinate.
+        yfrom = 8 - int(move_str[1:2])
         xto = letter_to_xpos(move_str[2:3])
-        yto = 8 - int(move_str[3:4])  # The board is "upside down", so flip the y coordinate.
+        yto = 8 - int(move_str[3:4])
         return Move(xfrom, yfrom, xto, yto)
     except ValueError:
         print("Invalid format. Example: A2 A4")
